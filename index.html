@@ -1,4 +1,172 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{margin: 0; padding: 0; box-sizing: border-box;}
+        .inner{width: 95% ; margin: auto; height:1500px; background: gray;}
+        header{height:25px; background: gray; color: white; padding: 4px 10px;}
+        .content1{height:100px; background: #565656;}
+            .big{color: white}
+            .small{color: white}
+        .content2{height:50px; background: gray; }
+            .indextitle{color: white;}
+            .indexlist{color: white;}
+        .content3{height:1100px; background: rgb(233, 217, 219); padding: 10px 10px;}
+        footer{height:100px; background: #565656;}
+    </style>
+</head>
 
-기상재해(태풍, 호우 등) 및 지질재해(화산, 지진 등), 자연재해 관련 정보를 제공하는
-대한민국 기상청, 일본 기상청 등으로 연결합니다.
+<body>
+    <div class="wrap">
+
+        <div class="inner">
+
+            <header>
+                <div><p style="font-size: 12px"><strong>2 0 2 0 . 0 2 ~</strong>
+                </div>
+            </header>
+                
+            <div class="content1">
+                <center>
+                    <div class="big"><p style="font-size: 40px"><strong>방 재 청</strong></p></div>
+                    <div class="small"><p style="font-size: 10px">---</p></div>
+                    <div class="small"><p style="font-size: 10px"><strong>DISASTER PREVENTION PROJECT : To protect one's life</strong></p></div>
+                    <div class="small"><p style="font-size: 10px">---</p></div>
+                </center>
+            </div>
+
+            <div class="content2">
+                <center>
+                    <div class="indextitle"><p style="font-size: 14px"><strong>바 로 가 기</strong></p></div>
+                    <div class="indexlist">
+                        <p><strong>
+                            <a href="#지진" style="font-size: 11px">지진·화산·쓰나미</a> &nbsp;
+                            <a href="#태풍" style="font-size: 11px">태풍</a> &nbsp;
+                            <a href="#특보" style="font-size: 11px">기상특보</a> &nbsp; 
+                            <a href="#강수" style="font-size: 11px">강수</a> &nbsp; 
+                            <a href="#예보" style="font-size: 11px">일기예보</a> &nbsp;
+                            <a href="#방재정보" style="font-size: 11px">방재정보</a>
+                        </strong></p>
+
+                    </div>
+                </center>
+            </div>
+
+            <div class="content3">
+                <div><p id="지진" style="font-size: 14px"><strong>지진·화산·쓰나미</strong></p></div>
+                    <div>
+                        <li><a href="https://www.weather.go.kr/w/eqk-vol/recent-eqk.do" style="font-size: 11px">
+                            [한국 기상청] 지진정보</a></li>
+                        <li><a href="https://www.weather.go.kr/pews/" style="font-size: 11px">
+                            [한국 기상청] 사용자 맞춤형 지진정보서비스</a></li>
+                        <li><a href="https://www.jma.go.jp/bosai/map.html#5/37.996/135/&elem=int&contents=earthquake_map" style="font-size: 11px">
+                            [일본 기상청] 지진정보</a></li>
+                        <li><a href="http://earthquake.usgs.gov/earthquakes/map/" style="font-size: 11px">
+                            [미국 지질조사국] 지진정보</a></li>
+                        <li><a href="https://www.jma.go.jp/bosai/map.html#5/34.488/137.021/&contents=volcano" style="font-size: 11px">
+                            [일본 기상청] 분화경보·예보</a></li>
+                        <li><a href="https://www.jma.go.jp/bosai/map.html#5/37.996/135/&elem=warn&contents=tsunami" style="font-size: 11px">
+                            [일본 기상청] 쓰나미정보</a></li>
+                        <li><a href="https://www.hinet.bosai.go.jp/" style="font-size: 11px">
+                            [일본 방재과학기술연구소] Hi-net</a></li>
+                        <li><a href="https://www.tsunami.gov/" style="font-size: 11px">
+                            [미국 해양대기청] 쓰나미 경보 시스템</a></li>
+                        <li><a href="https://www.phivolcs.dost.gov.ph/index.php/tsunami/tsunami-advisory-and-warning3" style="font-size: 11px">
+                            [필리핀 과학기술부] 쓰나미정보</a></li>
+                    </div>
+                </br>
+                <div><p id="태풍" style="font-size: 14px"><strong>태풍</strong></p></div>
+                    <div>
+                        <li><a href="https://www.weather.go.kr/w/typhoon/report.do" style="font-size: 11px">
+                            [한국 기상청] 태풍정보</a></li>
+                        <li><a href="https://www.jma.go.jp/bosai/map.html#5/34.488/137.021/&elem=root&typhoon=all&contents=typhoon" style="font-size: 11px">
+                            [일본 기상청] 태풍정보</a></li>
+                        <li><a href="https://www.metoc.navy.mil/jtwc/jtwc.html" style="font-size: 11px">
+                            [미국 합동태풍경보센터] 태풍정보</a></li>
+                    </div>
+                </br>
+                <div><p id="특보" style="font-size: 14px"><strong>기상특보</strong></p></div>
+                    <div>
+                        <li><a href="https://www.weather.go.kr/w/weather/warning/status.do" style="font-size: 11px">
+                            [한국 기상청] 특보현황(기상특보,예비특보)</a></li>
+                        <li><a href="https://www.jma.go.jp/bosai/map.html#5/34.488/137.021/&elem=all&contents=warning" style="font-size: 11px">
+                            [일본 기상청] 기상경보·주의보</a></li>
+                    </div>
+                </br>
+
+                <div><p id="강수" style="font-size: 14px"><strong>강수</strong></p></div>
+                    <div>
+                        <li><a href="https://www.weather.go.kr/w/image/radar.do" style="font-size: 11px">
+                            [한국 기상청 ]레이더</a></li>
+                        <li><a href="https://www.weather.go.kr/w/image/vshrt/rain.do" style="font-size: 11px">
+                            [한국 기상청] 레이더(초단기 예측)</a></li>
+                        <li><a href="https://radar.kma.go.kr/radar/main.do?cgiId=HCI" style="font-size: 11px">
+                            [한국 기상청] 수상체</a></li>
+                        <li><a href="https://www.weather.go.kr/plus/images/rader_02.jsp" style="font-size: 11px">
+                            [한국 기상청] 눈비영역</a></li>
+                        <li><a href="https://www.weather.go.kr/w/image/lgt.do" style="font-size: 11px">
+                            [한국 기상청] 낙뢰</a></li>
+                        <li><a href="http://radar.kma.go.kr/cgi-bin/center/nph-rdr_cmp_img?cmp=HSP&color=C2&qcd=HSO&obs=ECHO&map=HB&size=1000&xp=720&yp=614&ht=700&zoom=2&lonlat=1&gis=1&legend=1&aws=1&gov=KMA&color=C4&wv=1&ht=800&topo=0" style="font-size: 11px">
+                            [한국 기상청] 고해상도 레이더 - 전국</a></li>
+                        <li><a href="https://radar.kma.go.kr/cgi-bin/center/nph-rdr_cmp_img?cmp=HSP&color=C2&qcd=HSO&obs=ECHO&map=HB&size=1000&xp=630&yp=790&ht=700&zoom=4.9&lonlat=1&gis=1&legend=1&aws=1&gov=KMA&color=C4&wv=1&ht=800&topo=0" style="font-size: 11px">
+                            [한국 기상청] 고해상도 레이더 - 수도권</a></li>
+                        <li><a href="https://radar.kma.go.kr/cgi-bin/center/nph-rdr_cmp_img?cmp=HSP&color=C2&qcd=HSO&obs=ECHO&map=HB&size=1000&xp=675&yp=680&ht=700&zoom=4.9&lonlat=1&gis=1&legend=1&aws=1&gov=KMA&color=C4&wv=1&ht=800&topo=0" style="font-size: 11px">
+                            [한국 기상청] 고해상도 레이더 - 충청권</a></li>
+                        <li><a href="https://radar.kma.go.kr/cgi-bin/center/nph-rdr_cmp_img?cmp=HSP&color=C2&qcd=HSO&obs=ECHO&map=HB&size=1000&xp=630&yp=528&ht=700&zoom=4.9&lonlat=1&gis=1&legend=1&aws=1&gov=KMA&color=C4&wv=1&ht=800&topo=0" style="font-size: 11px">
+                            [한국 기상청] 고해상도 레이더 - 호남권</a></li>
+                        <li><a href="https://radar.kma.go.kr/cgi-bin/center/nph-rdr_cmp_img?cmp=HSP&color=C2&qcd=HSO&obs=ECHO&map=HB&size=1000&xp=790&yp=550&ht=700&zoom=4.9&lonlat=1&gis=1&legend=1&aws=1&gov=KMA&color=C4&wv=1&ht=800&topo=0" style="font-size: 11px">
+                            [한국 기상청] 고해상도 레이더 - 경남권</a></li>
+                        <li><a href="https://radar.kma.go.kr/cgi-bin/center/nph-rdr_cmp_img?cmp=HSP&color=C2&qcd=HSO&obs=ECHO&map=HB&size=1000&xp=800&yp=660&ht=700&zoom=4.9&lonlat=1&gis=1&legend=1&aws=1&gov=KMA&color=C4&wv=1&ht=800&topo=0" style="font-size: 11px">
+                            [한국 기상청] 고해상도 레이더 - 경북권</a></li>
+                        <li><a href="https://radar.kma.go.kr/cgi-bin/center/nph-rdr_cmp_img?cmp=HSP&color=C2&qcd=HSO&obs=ECHO&map=HB&size=1000&xp=760&yp=820&ht=700&zoom=4.9&lonlat=1&gis=1&legend=1&aws=1&gov=KMA&color=C4&wv=1&ht=800&topo=0" style="font-size: 11px">
+                            [한국 기상청] 고해상도 레이더 - 강원권</a></li>
+                        <li><a href="http://hrfco.go.kr/main.do" style="font-size: 11px">
+                            [한강홍수통제소] 홍수특보 상황</a></li>
+                    </div>
+                </br>
+                <div><p id="예보" style="font-size: 14px"><strong>예보</strong></p></div>
+                    <div>
+                        <li><a href="https://www.weather.go.kr/w/weather/forecast/short-term.do" style="font-size: 11px">
+                            [한국 기상청] 단기예보</a></li>
+                        <li><a href="https://www.weather.go.kr/w/weather/forecast/mid-term.do" style="font-size: 11px">
+                            [한국 기상청] 중기예보</a></li>
+                        <li><a href="https://www.weather.go.kr/w/weather/long-term/month1.do" style="font-size: 11px">
+                            [한국 기상청] 1개월 전망</a></li>
+                        <li><a href="https://www.weather.go.kr/w/weather/long-term/month3.do" style="font-size: 11px">
+                            [한국 기상청] 3개월 전망</a></li>
+                            <li><a href="https://www.weather.go.kr/w/weather/long-term/month3-guide.do" style="font-size: 11px">
+                                [한국 기상청] 3개월 전망 해설서</a></li>
+                        <li><a href="https://www.weather.go.kr/w/weather/long-term/el-la.do" style="font-size: 11px">
+                            [한국 기상청] 엘니뇨 라니냐 전망</a></li>
+                        <li><a href="https://www.jma.go.jp/bosai/wdist/#lat:35.550105/lon:135.856934/zoom:5/colordepth:normal/elements:wm" style="font-size: 11px">
+                            [일본 기상청] 단기예보</a></li>
+                        <li><a href="https://www.jma.go.jp/bosai/map.html#5/34.488/137.021/&contents=forecast" style="font-size: 11px">
+                            [일본 기상청] 중기예보</a></li>
+                    </div>
+                </br>
+                <div><p id="방재정보" style="font-size: 14px"><strong>방재정보</strong></p></div>
+                    <div>
+                        <li><a href="https://twitter.com/kma_skylove" style="font-size: 11px">
+                            [한국] 기상청 X</a></li>
+                        <li><a href="https://twitter.com/withyou3542" style="font-size: 11px">
+                            [한국] 행정안전부 X</a></li>
+                        <li><a href="https://twitter.com/JMA_bousai" style="font-size: 11px">
+                            [일본] 기상청 방재정보 X</a></li>
+                        <li><a href="https://twitter.com/kantei" style="font-size: 11px">
+                            [일본] 수상관저 X</a></li> 
+                        <li><a href="https://twitter.com/UN_NERV" style="font-size: 11px">
+                            [일본] NERV X</a></li> 
+                    </div>
+            </div> <!--end of content3-->
+
+            <footer>
+                <p></p>
+            </footer>
+        </div>
+    </div>
+
+</body>
+</html>
