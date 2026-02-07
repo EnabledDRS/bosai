@@ -399,3 +399,16 @@ document.addEventListener('DOMContentLoaded', async function () {
     setInterval(updateTimeDisplays, 1000);
 });
 
+// 화면 더블 클릭 시 전체 화면 전환/해제
+document.body.addEventListener('dblclick', () => {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch((err) => {
+            console.log(`Error attempting to enable full-screen mode: ${err.message}`);
+        });
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
+});
+
