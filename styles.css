@@ -1,401 +1,396 @@
-document.addEventListener('DOMContentLoaded', async function () {
-    const regionSelect       = document.querySelector('.region-select');
-    const image              = document.getElementById('radar-image');
-    const slider             = document.getElementById('time-slider');
-    const speedDisplay       = document.querySelector('.speed-display');
-    const playPauseButton    = document.querySelector('.pause-btn');
-    const slowerButton       = document.getElementById('slower');
-    const fasterButton       = document.getElementById('faster');
-    const lastRefresh        = document.querySelector('.refresh-time');
-    const timeDisplay        = document.querySelector('.image-time');
-    const nowDisplay         = document.querySelector('.now');
-    const centerCheckbox     = document.getElementById('center');
-    const windVectorCheckbox = document.getElementById('wv');
-    const awsCheckbox        = document.getElementById('aws');
-    const topoCheckbox       = document.getElementById('topo');
-    const lightningCheckbox  = document.getElementById('lightning');
-    const latInput           = document.getElementById('lat-display');
-    const lonInput           = document.getElementById('lon-display');
-    const radInput           = document.getElementById('rad-display');
-    const latDownButton      = document.getElementById('down-button-lat');
-    const latUpButton        = document.getElementById('up-button-lat');
-    const lonDownButton      = document.getElementById('down-button-lon');
-    const lonUpButton        = document.getElementById('up-button-lon');
-    const zoomOutButton      = document.getElementById('zoom-out-button');
-    const zoomInButton       = document.getElementById('zoom-in-button');
-    const zeroButton         = document.getElementById('zero-button');
-    const okButton           = document.getElementById('ok-button');
+body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+    margin: 0;
+    background-color: #121212;
+    color: #ffffff;
+    font-size: 12px;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
 
-    const baseURL = "https://radar.kma.go.kr/cgi-bin/center/nph-rdr_cmp_img?cmp=HSP&color=C4&qcd=HSO&obs=ECHO&map=HB&size=800&gis=1&legend=1&gov=KMA";
-    let includeGcT = false;
+    /* 폰트 통일 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    
+    /* 가로 모드 글자 크기 자동 조정 방지 */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
 
-    function updateBaseURL() {
-        return includeGcT ? baseURL + "&gc=T" : baseURL;
-    }
+/* 모든 입력 요소 폰트 상속 강제 */
+input, button, select, textarea {
+    font-family: inherit;
+}
 
-    const regionConfigs = {
-        '전국/선택지점[4시간]': { url: "&lonlat=0&lat=35.90&lon=127.80&zoom=2&ht=1000", interval: 5, frames: 48 },
-        '수도권[2시간]':       { url: "&lonlat=0&lat=37.57&lon=126.97&zoom=4.9&ht=1000", interval: 5, frames: 24 },
-        '충청권[2시간]':       { url: "&lonlat=0&lat=36.49&lon=127.24&zoom=4.9&ht=1000", interval: 5, frames: 24 },
-        '호남권[2시간]':       { url: "&lonlat=0&lat=35.17&lon=126.89&zoom=4.9&ht=1000", interval: 5, frames: 24 },
-        '경남권[2시간]':       { url: "&lonlat=0&lat=35.22&lon=128.67&zoom=4.9&ht=1000", interval: 5, frames: 24 },
-        '경북권[2시간]':       { url: "&lonlat=0&lat=36.25&lon=128.56&zoom=4.9&ht=1000", interval: 5, frames: 24 },
-        '강원권[2시간]':       { url: "&lonlat=0&lat=37.78&lon=128.40&zoom=4.9&ht=1000", interval: 5, frames: 24 },
-        '제주권[2시간]':       { url: "&lonlat=0&lat=33.38&lon=126.53&zoom=4.9&ht=1000", interval: 5, frames: 24 },
-        '동아시아[24시간]':    { url: "&lonlat=0&lat=33.11&lon=126.27&zoom=0.5&ht=1000", interval: 30, frames: 48 }
-    };
+/* -------------------------------------------------------------- */
+.container {
+    width: 350px;
+    height: auto;
+    border: 1px solid #333;
+    padding: 5px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    background-color: #1e1e1e;
+}
 
-    let selectedRegionConfig = regionConfigs['전국/선택지점[4시간]'];
-    let intervalId    = null;
-    let reloadTimer   = null;
-    let isPlaying     = true;
-    let preloadedImages = [];
-    let speed         = parseInt(localStorage.getItem('speed')) || 500;
-    let imageTimes    = [];
-    let userPaused    = false;
-    let lastUpdateRegion, lastUpdateCenter, lastUpdateWindVector, lastUpdateAws, lastUpdateTopo, lastUpdateLightning;
+/* 패널 정렬 설정 */
+.left-panel, .right-panel {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-    // 저장된 설정 불러오기
-    const savedRegion    = localStorage.getItem('region-select');
-    const savedCenter    = localStorage.getItem('center')    === '1';
-    const savedWindVector= localStorage.getItem('wv')        === '1';
-    const savedAws       = localStorage.getItem('aws')       === '1';
-    const savedTopo      = localStorage.getItem('topo')      === '1';
-    const savedLightning = localStorage.getItem('lightning') === '1';
+@media (max-width: 450px) {
+    .container {
+        width: 100%;
+        height: auto;
+        padding: 5px 5px;
+    }
+}
 
-    if (savedRegion)     { selectedRegionConfig = regionConfigs[savedRegion]; regionSelect.value = savedRegion; }
-    if (savedCenter)     centerCheckbox.checked = true;
-    if (savedWindVector) windVectorCheckbox.checked = true;
-    if (savedAws)        awsCheckbox.checked = true;
-    if (savedTopo)       topoCheckbox.checked = true;
-    if (savedLightning)  lightningCheckbox.checked = true;
+/* -------------------------------------------------------------- */
+.top-controller {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
 
-    let latParam = localStorage.getItem('lat');
-    let lonParam = localStorage.getItem('lon');
-    let radParam = localStorage.getItem('rad');
+.region-select {
+    background-color: #333;
+    color: #ffffff;
+    border: 1px solid #444;
+    padding: 5px;
+    margin-right: 5px;
+}
 
-    // 서버 시간 가져오기 (예외 처리 포함)
-    async function getInternetTime() {
-        try {
-            const res = await fetch('https://worldtimeapi.org/api/timezone/Asia/Seoul', { mode: 'cors' });
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            const data = await res.json();
-            return new Date(data.datetime);
-        } catch (err) {
-            console.error('서버 시간 로드 실패:', err);
-            return new Date();  // 클라이언트 시간으로 대체
-        }
-    }
+.time-info {
+    margin-left: 5px;
+    color: #cccccc;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; 
+}
 
-    function formatDate(date, type = "url") {
-        const y   = date.getFullYear();
-        const m   = ('0' + (date.getMonth()+1)).slice(-2);
-        const d   = ('0' + date.getDate()).slice(-2);
-        const h   = ('0' + date.getHours()).slice(-2);
-        const min = ('0' + date.getMinutes()).slice(-2);
-        const s   = ('0' + date.getSeconds()).slice(-2);
-        if (type === "url")     return `${y}${m}${d}${h}${min}`;
-        else if (type === "display") return `${y}.${m}.${d} ${h}:${min}:${s}`;
-        else if (type === "image")   return `${y}. ${m}. ${d}.  ${h}:${min}`;
-    }
+.now {
+    margin-top: 2px;
+}
 
-    // 이미지 URL 목록 생성
-    function mergeParams(url) {
-        const params = new URLSearchParams(url.replace(/^&/, ''));
-        if (latParam) params.set('lat', latParam);
-        if (lonParam) params.set('lon', lonParam);
-        if (radParam) params.set('zoom', (574*Math.pow(radParam,-1.001)).toFixed(2));
-        return '&' + params.toString();
-    }
+/* -------------------------------------------------------------- */
+#radar-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
 
-    async function generateImageURLs() {
-        const urls     = [];
-        const nowKST   = await getInternetTime();
-        const interval = selectedRegionConfig.interval;
-        nowKST.setMinutes(Math.floor(nowKST.getMinutes()/interval)*interval);
-        nowKST.setSeconds(0); nowKST.setMilliseconds(0);
-        imageTimes = [];
+.image-time {
+    text-align: center;
+    margin: 5px 0;
+    font-size: 14px; 
+    width: 100%; 
+    /* 여기서 bold 제거됨 */
+    font-weight: normal;
+    font-family: inherit;
+}
 
-        for (let i = 0; i < selectedRegionConfig.frames; i++) {
-            const date    = new Date(nowKST.getTime() - i * interval * 60000);
-            const tm      = formatDate(date, "url");
+#time-slider {
+    display: block;
+    width: 85%; 
+    background-color: #333;
+    margin: 5px auto;
+}
 
-            const regionUrl = mergeParams(selectedRegionConfig.url);
+/* -------------------------------------------------------------- */
+.buttom-controller {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 5px 0;
+}
 
-            const url = `${updateBaseURL()}&center=${centerCheckbox.checked?1:0}` +
-                        `&wv=${windVectorCheckbox.checked?1:0}` +
-                        `&aws=${awsCheckbox.checked?1:0}` +
-                        `&topo=${topoCheckbox.checked?1:0}` +
-                        `&lightning=${lightningCheckbox.checked?1:0}` +
-                        `${regionUrl}&tm=${tm}`;
-            urls.push(url);
-            imageTimes.push(date);
-        }
-        return urls.reverse();
-    }
+.speed-display {
+    border: 1px solid #444;
+    border-radius: 5px;
+    padding: 0 10px;
+    height: 28px;
+    line-height: 18px; 
+    margin: 0 5px;
+    color: #ffffff;
+    background-color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-    // 이미지 갱신 및 preload
-    async function updateImages(force = false) {
-        if (!force &&
-            lastUpdateRegion     === regionSelect.value &&
-            lastUpdateCenter     === (centerCheckbox.checked?1:0) &&
-            lastUpdateWindVector === (windVectorCheckbox.checked?1:0) &&
-            lastUpdateAws        === (awsCheckbox.checked?1:0) &&
-            lastUpdateTopo       === (topoCheckbox.checked?1:0) &&
-            lastUpdateLightning  === (lightningCheckbox.checked?1:0)
-        ) return;
+.speed-btn, .pause-btn {
+    height: 28px;
+    padding: 0 10px;
+    color: #ffffff;
+    background-color: #444;
+    border: 1px solid #555;
+    border-radius: 5px;
+    margin: 0 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    white-space: nowrap;
+}
 
-        const urls = await generateImageURLs();
-        imageTimes.reverse(); // Reverse imageTimes to match reversed urls
-        preloadedImages = urls.map((url, idx) => {
-            const img = new Image();
-            img.src = url;
-            img.onerror = () => {
-                console.warn(`이미지 로딩 실패: ${url}`);
-                if (!reloadTimer) {
-                    reloadTimer = setInterval(() => location.reload(), 2000);
-                }
-            };
-            img.onload = () => {
-                if (reloadTimer) {
-                    clearInterval(reloadTimer);
-                    reloadTimer = null;
-                }
-            };
-            return { img, time: imageTimes[idx] };
-        });
+.speed-btn:hover, .pause-btn:hover, .grid-btn:hover {
+    background-color: #444;
+    transform: scale(1.02);
+}
+.speed-btn:active, .pause-btn:active {
+    background-color: #555;
+    transform: scale(0.95);
+    color: #ffffff;
+}
 
-        slider.max = selectedRegionConfig.frames - 1;
-        slider.value = 0;
-        slider.addEventListener('input', () => {
-            const i = slider.value;
-            if (preloadedImages[i]) {
-                image.src = preloadedImages[i].img.src;
-                timeDisplay.textContent = formatDate(preloadedImages[i].time, "image");
-            }
-        });
-        
-        if (preloadedImages.length > 0) {
-            image.src = preloadedImages[0].img.src;
-            image.style.width = "100%";
-            timeDisplay.textContent = formatDate(preloadedImages[0].time, "image");
-        }
+/* -------------------------------------------------------------- */
+.checkboxes {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 85%;
+    margin: 5px auto;
+}
 
-        if (isPlaying) startAutoPlay();
+.checkboxes label {
+    display: flex;
+    align-items: center;
+}
 
-        lastUpdateRegion     = regionSelect.value;
-        lastUpdateCenter     = centerCheckbox.checked?1:0;
-        lastUpdateWindVector = windVectorCheckbox.checked?1:0;
-        lastUpdateAws        = awsCheckbox.checked?1:0;
-        lastUpdateTopo       = topoCheckbox.checked?1:0;
-        lastUpdateLightning  = lightningCheckbox.checked?1:0;
-    }
+/* -------------------------------------------------------------- */
+.button-grid {
+    display: grid;
+    grid-template-columns: 5fr 1fr 1fr 3fr;
+    grid-template-rows: repeat(3, 1fr);
+    gap: 5px;
+    width: 80%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
 
-    // 자동 재생
-    function startAutoPlay() {
-        clearInterval(intervalId);
-        intervalId = setInterval(() => {
-            let nextValue = (parseInt(slider.value) + 1);
-            if (nextValue >= selectedRegionConfig.frames) {
-                nextValue = 0;
-            }
-            slider.value = nextValue;
-            if (preloadedImages[nextValue]) {
-                image.src = preloadedImages[nextValue].img.src;
-                timeDisplay.textContent = formatDate(preloadedImages[nextValue].time, "image");
-            }
-        }, speed);
-    }
+.grid-input {
+    width: 100%;
+    height: 28px;
+    box-sizing: border-box;
+    border: 1px solid #555;
+    border-radius: 5px;
+    padding-left: 5px;
+    background-color: #ffffff; 
+    color: #000;
+}
 
-    // 버튼 이벤트
-    playPauseButton.addEventListener('click', () => {
-        if (isPlaying) {
-            clearInterval(intervalId);
-            playPauseButton.textContent = '재생';
-            userPaused = true;
-        } else {
-            startAutoPlay();
-            playPauseButton.textContent = '정지';
-            userPaused = false;
-        }
-        isPlaying = !isPlaying;
-    });
+.grid-btn {
+    padding: 0 10px;
+    color: #ffffff;
+    background-color: #444;
+    border: 1px solid #555;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-    fasterButton.addEventListener('click', () => {
-        if (speed > 100) {
-            speed -= 100;
-            speedDisplay.textContent = `${(speed/1000).toFixed(1)} s/frame`;
-            localStorage.setItem('speed', speed);
-            if (isPlaying) { clearInterval(intervalId); startAutoPlay(); }
-        }
-    });
+.grid-btn:hover {
+    background-color: #444;
+    transform: scale(1.02);
+}
 
-    slowerButton.addEventListener('click', () => {
-        if (speed < 2000) {
-            speed += 100;
-            speedDisplay.textContent = `${(speed/1000).toFixed(1)} s/frame`;
-            localStorage.setItem('speed', speed);
-            if (isPlaying) { clearInterval(intervalId); startAutoPlay(); }
-        }
-    });
+.grid-btn:active {
+    background-color: #555;
+    transform: scale(0.95);
+    color: #ffffff;
+}
 
-    // 입력 상태 업데이트
-    function updateInputState() {
-        const disabled = regionSelect.value !== '전국/선택지점[4시간]';
-        latInput.disabled = lonInput.disabled = radInput.disabled = disabled;
-        if (disabled) {
-            latInput.value = '';
-            lonInput.value = '';
-            radInput.value = '';
-            latInput.placeholder = "전국/선택지점";
-            lonInput.placeholder = "에서 좌표 지정";
-            radInput.placeholder = "";
-        } else {
-            loadLatLonZoom();
-            latInput.placeholder = "위도(32°~44°)";
-            lonInput.placeholder = "경도(123°~131°)";
-            radInput.placeholder = "반경(km)";
-        }
-        zeroButton.classList.toggle('highlight', !!(latInput.value||lonInput.value||radInput.value));
-    }
+.grid-btn.highlight {
+    border: 1px solid #ff0000;
+}
 
-    // 값 증감 함수
-    function modifyValue(el, inc) {
-        if (!el.disabled) {
-            let v = parseFloat(el.value) || (el === latInput ? 35.90 : 127.80);
-            v += inc;
-            el.value = (el === radInput ? Math.max(0,v).toFixed(0) : v.toFixed(2));
-            saveLatLonZoom();
-        }
-    }
-    function setupHold(btn, el, inc) {
-        let tid, iid;
-        const start = () => {
-            modifyValue(el, inc);
-            iid = setTimeout(() => {
-                tid = setInterval(() => modifyValue(el, inc), 100);
-            }, 500);
-        };
-        const stop = () => {
-            clearTimeout(iid);
-            clearInterval(tid);
-        };
-        btn.addEventListener('mousedown', start);
-        btn.addEventListener('mouseup', stop);
-        btn.addEventListener('mouseleave', stop);
-    }
-    setupHold(latDownButton, latInput, -0.01);
-    setupHold(latUpButton,   latInput,  0.01);
-    setupHold(lonDownButton, lonInput, -0.01);
-    setupHold(lonUpButton,   lonInput,  0.01);
-    setupHold(zoomOutButton, radInput, 10); // 반경이 클수록 zoom out
-    setupHold(zoomInButton,  radInput, -10); // 반경이 작을수록 zoom in
+/* -------------------------------------------------------------- */
+.bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 60%;
+    padding: 10px 0;
+}
 
-    // 로컬스토리지 저장/불러오기
-    function saveLatLonZoom() {
-        localStorage.setItem('lat', latInput.value);
-        localStorage.setItem('lon', lonInput.value);
-        localStorage.setItem('rad', radInput.value);
-        latParam = latInput.value; lonParam = lonInput.value; radParam = radInput.value;
-        zeroButton.classList.toggle('highlight', !!(latInput.value||lonInput.value||radInput.value));
-    }
-    function loadLatLonZoom() {
-        const l = localStorage.getItem('lat');
-        const o = localStorage.getItem('lon');
-        const r = localStorage.getItem('rad');
-        if (l) latInput.value = l;
-        if (o) lonInput.value = o;
-        if (r) radInput.value = r;
-    }
-    
-    // 셀렉트/체크박스 변경
-    regionSelect.addEventListener('change', () => {
-        selectedRegionConfig = regionConfigs[regionSelect.value];
-        localStorage.setItem('region-select', regionSelect.value);
-        latParam = lonParam = radParam = null;
-        localStorage.removeItem('lat');
-        localStorage.removeItem('lon');
-        localStorage.removeItem('rad');
-        updateImages(true);
-        updateInputState();
-    });
-    [centerCheckbox, windVectorCheckbox, awsCheckbox, topoCheckbox, lightningCheckbox]
-    .forEach(chk => chk.addEventListener('change', () => {
-        localStorage.setItem(chk.id, chk.checked?'1':'0');
-        updateImages(true);
-    }));
+#logo {
+    height: 21px;
+    border: 1px solid #fff;
+}
 
-    // 확인 버튼 (좌표 설정)
-    okButton.addEventListener('click', async () => {
-        if (regionSelect.value !== '전국/선택지점[4시간]') {
-            alert('전국/선택지점[4시간] 옵션에서만 좌표를 설정할 수 있습니다.');
-            return;
-        }
-        let lat = latInput.value, lon = lonInput.value, rad = radInput.value;
-        if (String(lat).includes('°')||String(lat).includes("'")||String(lat).includes('"')) lat = dmsToDecimal(lat);
-        if (String(lon).includes('°')||String(lon).includes("'")||String(lon).includes('"')) lon = dmsToDecimal(lon);
-        latInput.value = parseFloat(lat).toFixed(2);
-        lonInput.value = parseFloat(lon).toFixed(2);
-        radInput.value = rad||'';
-        const validLat = lat>=32&&lat<=44;
-        const validLon = lon>=123&&lon<=131;
-        const validRad = rad===''||rad>0;
-        const invalid = [];
-        if (!validLat) invalid.push('위도');
-        if (!validLon) invalid.push('경도');
-        if (!validRad) invalid.push('반경');
-        if (invalid.length) {
-            alert('유효하지 않은 ' + invalid.join(', ') + ' 값입니다.');
-        } else {
-            saveLatLonZoom();
-            await updateImages(true);
-            location.reload();
-        }
-    });
+.resource {
+    font-size: 12px;
+    color: #ffffff;
+}
 
-    // 기본값 복원
-    zeroButton.addEventListener('click', () => {
-        latInput.value = '';
-        lonInput.value = '';
-        radInput.value = '';
-        saveLatLonZoom();
-        updateImages(true);
-        if (!isPlaying) {
-            startAutoPlay();
-            playPauseButton.textContent = '정지';
-            isPlaying = true;
-            userPaused = false;
-        }
-    });
+/* ============================================================== */
+/* 가로 모드 (Landscape) 전용 스타일 */
+/* ============================================================== */
+@media screen and (orientation: landscape) {
+    body {
+        height: 100vh;
+        overflow: hidden;
+        background-color: #000;
+    }
 
-    // 시간 표시 업데이트
-    function updateTimeDisplays() {
-        nowDisplay.textContent = `현재: ${formatDate(new Date(), 'display')}`;
-    }
-    function updateRefreshTime() {
-        lastRefresh.textContent = `갱신: ${formatDate(new Date(), 'display')}`;
-    }
+    .container {
+        flex-direction: row;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        justify-content: space-between;
+        background-color: #1e1e1e;
+        border: none;
+    }
 
-    // DMS → Decimal 변환
-    function dmsToDecimal(dms) {
-        const p = String(dms).match(/(\d+(\.\d+)?)/g) || [];
-        const deg = parseFloat(p[0]) || 0;
-        const min = (parseFloat(p[1]) || 0) / 60;
-        const sec = (parseFloat(p[2]) || 0) / 3600;
-        return deg + min + sec;
-    }
+    .left-panel {
+        flex: 1; 
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #000; 
+        overflow: hidden;
+    }
 
-    // 초기화
-    updateInputState();
-    await updateImages(true);
-    updateTimeDisplays();
-    updateRefreshTime();
-    speedDisplay.textContent = `${(speed/1000).toFixed(1)} s/frame`;
+    #radar-image {
+        height: 100%;
+        width: auto;
+        object-fit: contain; 
+    }
 
-    // 5분마다 자동 새로고침 (사용자 일시정지 아닐 때)
-    setInterval(() => { if (!userPaused) location.reload(); }, 300000);
+    .right-panel {
+        width: 320px;
+        min-width: 320px;
+        height: 100%;
+        overflow-y: hidden;
+        padding: 5px 10px; 
+        box-sizing: border-box;
+        border-left: 1px solid #333;
+        background-color: #1e1e1e;
+        justify-content: space-around;
+    }
 
-    // 매초 현재 시간 갱신
-    setInterval(updateTimeDisplays, 1000);
-});
+    .top-controller {
+        display: flex;
+        flex-direction: row !important;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 2px;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
 
+    .region-select {
+        width: 55%;
+        font-size: 11px;
+        height: 24px;
+        padding: 0 2px;
+    }
+
+    .time-info {
+        width: 44%;
+        font-size: 10px;
+        line-height: 1.2;
+        margin: 0;
+    }
+    
+    .now {
+        margin-top: 0;
+    }
+
+    /* [수정됨] 폰트 통일 */
+    .image-time {
+        margin: 2px 0;
+        font-size: 13px;
+        font-weight: normal; /* bold 제거 */
+        font-family: inherit;
+    }
+
+    #time-slider {
+        width: 98% !important;
+        margin: 2px auto;
+        height: 15px;
+    }
+
+    .buttom-controller {
+        width: 100%;
+        justify-content: space-evenly;
+        margin: 2px 0;
+        padding: 0;
+    }
+    
+    .buttom-controller button {
+        font-size: 11px;
+        padding: 0 8px;
+        height: 24px;
+    }
+    
+    .speed-display {
+        font-size: 11px;
+        height: 24px;
+    }
+
+    .checkboxes {
+        width: 100%;
+        justify-content: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 2px 0;
+        font-size: 11px;
+    }
+
+    .button-grid {
+        width: 98%;
+        margin: 2px 0;
+        gap: 3px;
+    }
+    
+    .grid-input {
+        font-size: 11px;
+        padding: 2px;
+        height: 24px;
+    }
+    
+    .grid-btn {
+        font-size: 11px;
+        padding: 0;
+        height: 24px;
+    }
+
+    .bottom {
+        width: 100%;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 2px; 
+        padding-bottom: 2px;
+        padding-top: 2px;
+    }
+    
+    #logo {
+        height: 18px;
+    }
+    
+    .resource {
+        font-size: 10px;
+    }
+}
