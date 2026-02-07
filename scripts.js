@@ -392,8 +392,23 @@ document.addEventListener('DOMContentLoaded', async function () {
     updateRefreshTime();
     speedDisplay.textContent = `${(speed/1000).toFixed(1)} s/frame`;
 
-    // 5분마다 자동 새로고침 (사용자 일시정지 아닐 때)
-    setInterval(() => { if (!userPaused) location.reload(); }, 300000);
+// 5분마다 페이지 새로고침 없이 데이터만 조용히 갱신
+setInterval(async () => {
+    if (!userPaused) {
+        console.log("5분 주기 자동 데이터 갱신 중...");
+        
+        // 1. 이미지 데이터 새로 받아오기 (강제 갱신)
+        await updateImages(true);
+        
+        // 2. 상단의 '갱신: yyyy.mm.dd...' 텍스트 업데이트
+        updateRefreshTime();
+        
+        // 3. (선택사항) 갱신 후 재생 상태 유지
+        if (isPlaying) {
+            startAutoPlay();
+        }
+    }
+}, 300000);
 
     // 매초 현재 시간 갱신
     setInterval(updateTimeDisplays, 1000);
