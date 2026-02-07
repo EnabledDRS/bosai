@@ -205,67 +205,132 @@ body {
 }
 
 /* -------------------------------------------------------------- */
-/* 가로 모드 (Landscape) 전용 스타일 */
 @media screen and (orientation: landscape) {
     body {
-        /* 가로 모드에서는 스크롤이 생길 수 1있으므로 높이 제한 해제 혹은 조정 */
         height: 100vh;
         overflow: hidden; /* 전체 화면 스크롤 방지 */
+        background-color: #000; /* 레터박스 배경색 통일 */
     }
 
     .container {
-        /* 가로 배치로 변경 */
-        flex-direction: row;
+        flex-direction: row; /* 좌우 배치 */
         width: 100%;
-        max-width: none; /* 350px 제한 해제 */
-        height: 100%;    /* 화면 꽉 채우기 */
-        padding: 0;      /* 패딩 초기화 */
+        max-width: none;
+        height: 100%;
+        padding: 0;
         justify-content: space-between;
+        background-color: #1e1e1e;
+        border: none; /* 외곽 테두리 제거 */
     }
 
-    /* [왼쪽] 이미지 패널 */
+    /* [왼쪽 패널] 이미지 영역 */
     .left-panel {
-        flex: 1;            /* 남은 공간 차지 (화면 비율에 따라 조정됨) */
-        height: 100%;       /* 세로 꽉 채우기 */
+        flex: 1; /* 남은 공간 전체 차지 */
+        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
-        background-color: #000; /* 이미지 배경 검정 처리 (선택사항) */
+        background-color: #000; 
         overflow: hidden;
     }
 
     #radar-image {
-        /* 이미지가 화면 높이를 넘지 않도록 설정 */
         height: 100%;
         width: auto;
-        object-fit: contain; /* 비율 유지하며 화면 안에 맞춤 */
+        object-fit: contain; 
     }
 
-    /* [오른쪽] 컨트롤 패널 */
+    /* [오른쪽 패널] 컨트롤러 영역 */
     .right-panel {
-        width: 350px;       /* 오른쪽 패널 너비 고정 (혹은 flex: 1) */
+        width: 360px; /* 내부 여백 고려하여 폭을 약간 확보 */
+        min-width: 360px; /* 화면이 작아져도 패널 크기 유지 */
         height: 100%;
-        overflow-y: auto;   /* 내용이 많으면 내부에만 스크롤 생성 */
-        padding: 10px;
+        overflow-y: auto; /* 세로 내용이 길어지면 스크롤 */
+        padding: 15px 10px; /* 상하 15px, 좌우 10px 여백 */
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
+        align-items: center; /* 내부 요소 가운데 정렬 */
+        border-left: 1px solid #333;
         background-color: #1e1e1e;
-        border-left: 1px solid #333; /* 구분선 추가 */
     }
 
-    /* 오른쪽 패널 내부 요소들 미세 조정 */
+    /* 1. 상단 컨트롤러 (드롭박스 + 시간) 한 줄 정렬 */
     .top-controller {
-        flex-direction: column; /* 공간 좁으므로 세로 배치 추천 */
-        align-items: flex-start;
-        gap: 5px;
+        display: flex;
+        flex-direction: row !important; /* 강제로 가로 배치 */
+        justify-content: space-between; /* 양 끝 정렬 */
+        align-items: center;
+        width: 100%; /* 패널 너비 꽉 채움 */
+        margin-bottom: 10px;
+        padding-top: 0;
+    }
+
+    /* 드롭박스 디테일 */
+    .region-select {
+        width: 55%; /* 시간 정보 공간 확보를 위해 너비 제한 */
+        font-size: 13px; /* 글자 크기 미세 조정 */
+        text-overflow: ellipsis; /* 내용 길면 ... 처리 */
+        white-space: nowrap;
+    }
+
+    /* 시간 정보 디테일 */
+    .time-info {
+        width: 43%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end; /* 오른쪽 정렬 */
+        justify-content: center;
+        font-size: 11px; /* 좁은 공간에 맞게 폰트 축소 */
+        margin-left: 0;
+        line-height: 1.4; /* 줄 간격 확보 */
     }
     
-    .button-grid {
-        width: 100%; /* 그리드 너비 꽉 채우기 */
+    .now {
+        margin-top: 0;
     }
-    
+
+    /* 2. 이미지 시간 텍스트 */
+    .image-time {
+        margin-bottom: 5px;
+        font-size: 15px;
+        font-weight: bold;
+    }
+
+    /* 3. 슬라이더 정렬 */
+    #time-slider {
+        width: 95% !important; /* 패널 너비에 맞게 꽉 채움 */
+        margin: 5px auto 15px auto; /* 아래쪽 여백 추가 */
+    }
+
+    /* 4. 버튼 컨트롤러 (재생/속도) */
+    .buttom-controller {
+        width: 100%;
+        justify-content: space-evenly; /* 버튼 간격 균등 분배 */
+        margin-bottom: 10px;
+    }
+
+    /* 5. 체크박스 영역 */
     .checkboxes {
-        flex-wrap: wrap; /* 체크박스 줄바꿈 허용 */
+        width: 100%;
+        justify-content: center; /* 가운데 정렬 */
+        gap: 10px; /* 항목 간 간격 */
+        flex-wrap: wrap; /* 좁으면 줄바꿈 */
+        margin-bottom: 15px;
+    }
+
+    /* 6. 버튼 그리드 (위경도 조절) */
+    .button-grid {
+        width: 95%; /* 패널 폭에 맞춤 */
+        margin-bottom: 15px;
+    }
+
+    /* 7. 하단 로고 */
+    .bottom {
+        width: 100%;
+        justify-content: center;
+        gap: 20px;
+        margin-top: auto; /* 남은 공간을 밀어내어 맨 아래로 */
+        padding-bottom: 20px; /* 하단 여백 확보 (아이폰 홈바 등 고려) */
     }
 }
