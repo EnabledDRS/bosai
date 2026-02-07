@@ -1,0 +1,271 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+    margin: 0;
+    background-color: #121212;
+    color: #ffffff;
+    font-size: 12px;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+}
+/* -------------------------------------------------------------- */
+.container {
+    width: 350px;
+    height: auto;
+    border: 1px solid #333;
+    padding: 5px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    background-color: #1e1e1e;
+}
+
+@media (max-width: 450px) {
+    .container {
+        width: 100%;
+        height: auto;
+        padding: 5px 5px;
+    }
+}
+/* -------------------------------------------------------------- */
+.top-controller {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height:auto;
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+
+.region-select {
+    background-color: #333;
+    color: #ffffff;
+    border: 1px solid #444;
+    padding: 5px;
+    margin-right: 5px;
+}
+
+.time-info {
+    margin-left: 5px;
+    color: #cccccc;
+}
+
+.now {
+    margin-top: 2px;
+}
+/* -------------------------------------------------------------- */
+#radar-image{
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.image-time {
+    text-align: center;
+    margin: 5px 0;
+    font-size: 14px; 
+    width: 100%; 
+}
+
+#time-slider {
+    display: block;
+    width: 85%; 
+    background-color: #333;
+    margin: 5 auto;
+}
+/* -------------------------------------------------------------- */
+.buttom-controller {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 5px 0;
+}
+
+.speed-display {
+    border: 1px solid #444;
+    border-radius: 5px;
+    padding: 0 10px;
+    height: 28px;
+    line-height: 18px;
+    margin: 0 5px;
+    color: #ffffff;
+    background-color: #333;
+    display: flex;
+    align-items: center;
+}
+
+.speed-btn, .pause-btn {
+    height: 28px;
+    padding: 0 10px;
+    color: #ffffff;
+    background-color: #444;
+    border: 1px solid #555;
+    border-radius: 5px;
+    margin: 0 5px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    white-space: nowrap;
+}
+
+.speed-btn:hover, .pause-btn:hover, .grid-btn:hover {
+    background-color: #444;
+    transform: scale(1.02);
+}
+.speed-btn:active, .pause-btn:active {
+    background-color: #555;
+    transform: scale(0.95);
+    color: #ffffff; /* Added to revert color after click */
+}
+
+/* -------------------------------------------------------------- */
+.checkboxes {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 85%;
+    margin: 5px auto;
+}
+
+.checkboxes label {
+    display: flex;
+    align-items: center;
+}
+
+/* -------------------------------------------------------------- */
+.button-grid {
+    display: grid;
+    grid-template-columns: 5fr 1fr 1fr 3fr;
+    grid-template-rows: repeat(3, 1fr);
+    gap: 5px;
+    width: 80%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.grid-input {
+    width: 100%;
+    height: 28px;
+    box-sizing: border-box;
+    border: 1px solid #555;
+    border-radius: 5px;
+    padding-left: 5px
+}
+
+.grid-btn {
+    padding: 0 10px;
+    color: #ffffff;
+    background-color: #444;
+    border: 1px solid #555;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.grid-btn:hover {
+    background-color: #444;
+    transform: scale(1.02);
+}
+
+.grid-btn:active {
+    background-color: #555;
+    transform: scale(0.95);
+    color: #ffffff; /* Added to revert color after click */
+}
+
+.grid-btn.highlight {
+    border: 1px solid #ff0000;
+}
+
+/* -------------------------------------------------------------- */
+.bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 60%;
+    padding: 10px 0;
+}
+
+#logo {
+    height: 21px;
+    border: 1px solid #fff;
+}
+
+.resource {
+    font-size: 12px;
+    color: #ffffff;
+}
+
+/* -------------------------------------------------------------- */
+/* 가로 모드 (Landscape) 전용 스타일 */
+@media screen and (orientation: landscape) {
+    body {
+        /* 가로 모드에서는 스크롤이 생길 수 1있으므로 높이 제한 해제 혹은 조정 */
+        height: 100vh;
+        overflow: hidden; /* 전체 화면 스크롤 방지 */
+    }
+
+    .container {
+        /* 가로 배치로 변경 */
+        flex-direction: row;
+        width: 100%;
+        max-width: none; /* 350px 제한 해제 */
+        height: 100%;    /* 화면 꽉 채우기 */
+        padding: 0;      /* 패딩 초기화 */
+        justify-content: space-between;
+    }
+
+    /* [왼쪽] 이미지 패널 */
+    .left-panel {
+        flex: 1;            /* 남은 공간 차지 (화면 비율에 따라 조정됨) */
+        height: 100%;       /* 세로 꽉 채우기 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #000; /* 이미지 배경 검정 처리 (선택사항) */
+        overflow: hidden;
+    }
+
+    #radar-image {
+        /* 이미지가 화면 높이를 넘지 않도록 설정 */
+        height: 100%;
+        width: auto;
+        object-fit: contain; /* 비율 유지하며 화면 안에 맞춤 */
+    }
+
+    /* [오른쪽] 컨트롤 패널 */
+    .right-panel {
+        width: 350px;       /* 오른쪽 패널 너비 고정 (혹은 flex: 1) */
+        height: 100%;
+        overflow-y: auto;   /* 내용이 많으면 내부에만 스크롤 생성 */
+        padding: 10px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        background-color: #1e1e1e;
+        border-left: 1px solid #333; /* 구분선 추가 */
+    }
+
+    /* 오른쪽 패널 내부 요소들 미세 조정 */
+    .top-controller {
+        flex-direction: column; /* 공간 좁으므로 세로 배치 추천 */
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .button-grid {
+        width: 100%; /* 그리드 너비 꽉 채우기 */
+    }
+    
+    .checkboxes {
+        flex-wrap: wrap; /* 체크박스 줄바꿈 허용 */
+    }
+}
