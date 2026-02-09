@@ -63,7 +63,7 @@ body {
 /* -------------------------------------------------------------- */
 #radar-image {
     width: 100%;
-    height: 180px;       /* 높이를 160px로 고정 */
+    height: 210px;       /* 높이를 160px로 고정 */
     object-fit: contain; /* 이미지 비율 유지 (찌그러짐 방지) */
     background-color: #000; /* 빈 공간이 생길 경우 배경색 지정 (선택사항) */
     display: block;
@@ -205,3 +205,4 @@ body {
     font-size: 12px;
     color: #ffffff;
 }
+
