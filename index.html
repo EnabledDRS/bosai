@@ -3,75 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="styles.css">
     <title>Radar</title>
 </head>
 <body>
     <div class="container">
-        <div class="left-panel">
-            <img id="radar-image" src="" alt="기상 레이더 이미지">
+        <div class="top-controller">
+            <select class="region-select">
+                <option>전국/선택지점[4시간]</option>
+                <option>수도권[2시간]</option>
+                <option>충청권[2시간]</option>
+                <option>호남권[2시간]</option>
+                <option>경남권[2시간]</option>
+                <option>경북권[2시간]</option>
+                <option>강원권[2시간]</option>
+                <option>제주권[2시간]</option>
+                <option>동아시아[24시간]</option>
+            </select>     
+            <div class="time-info">
+                <div class="refresh-time">갱신: yyyy.mm.dd. hh:mm:ss</div>
+                <div class="now">현재: yyyy.mm.dd. hh:mm:ss</div>
+            </div>
+        </div>    
+        <img id="radar-image" src="" alt="기상 레이더 이미지">
+        <div class="image-time">yyyy. mm. dd. hh : mm</div>
+        <input type="range" min="0" max="100" value="0" class="slider" id="time-slider">
+        <div class="buttom-controller">
+            <button class="speed-btn" id="slower">느리게</button>
+            <div class="speed-display">0.5s/frame</div>
+            <button class="speed-btn" id="faster">빠르게</button>
+            <button class="pause-btn">재생</button>
+        </div>
+        <div class="checkboxes">
+            <label><input type="checkbox" id="aws"> 지점</label>
+            <label><input type="checkbox" id="center"> 동심원</label>
+            <label><input type="checkbox" id="wv"> 바람벡터</label>
+            <label><input type="checkbox" id="topo"> 지형</label>
+            <label><input type="checkbox" id="lightning"> 낙뢰</label>
+        </div>
+        <div class="button-grid">
+            <input type="text" class="grid-input" id="lat-display" value="35.90" placeholder="위도(32°~44°)" >
+            <button class="grid-btn" id="down-button-lat">▽</button>
+            <button class="grid-btn" id="up-button-lat">△</button>
+            <button class="grid-btn" id="ok-button" style="grid-row: span 2;">확인</button>
+
+            <input type="text" class="grid-input" id="lon-display" value="127.80" placeholder="경도(123°~131°)">
+            <button class="grid-btn" id="down-button-lon">▽</button>
+            <button class="grid-btn" id="up-button-lon">△</button>
+
+            <input type="text" class="grid-input" id="rad-display" placeholder="반경(km)">
+            <button class="grid-btn" id="zoom-out-button">▽</button>
+            <button class="grid-btn" id="zoom-in-button">△</button>
+            <button class="grid-btn" id="zero-button">기본값</button>
         </div>
 
-        <div class="right-panel">
-            <div class="top-controller">
-                <select class="region-select">
-                    <option>전국/선택지점[4시간]</option>
-                    <option>수도권[2시간]</option>
-                    <option>충청권[2시간]</option>
-                    <option>호남권[2시간]</option>
-                    <option>경남권[2시간]</option>
-                    <option>경북권[2시간]</option>
-                    <option>강원권[2시간]</option>
-                    <option>제주권[2시간]</option>
-                    <option>동아시아[24시간]</option>
-                </select>      
-                <div class="time-info">
-                    <div class="refresh-time">갱신: yyyy.mm.dd. hh:mm:ss</div>
-                    <div class="now">현재: yyyy.mm.dd. hh:mm:ss</div>
-                </div>
-            </div>    
-            
-            <div class="image-time">yyyy. mm. dd. hh : mm</div>
-            <input type="range" min="0" max="100" value="0" class="slider" id="time-slider">
-            
-            <div class="buttom-controller">
-                <button class="speed-btn" id="slower">느리게</button>
-                <div class="speed-display">0.5s/frame</div>
-                <button class="speed-btn" id="faster">빠르게</button>
-                <button class="pause-btn">재생</button>
-            </div>
-
-            <div class="checkboxes">
-                <label><input type="checkbox" id="aws"> 지점</label>
-                <label><input type="checkbox" id="center"> 동심원</label>
-                <label><input type="checkbox" id="wv"> 바람벡터</label>
-                <label><input type="checkbox" id="topo"> 지형</label>
-                <label><input type="checkbox" id="lightning"> 낙뢰</label>
-            </div>
-
-            <div class="button-grid">
-                <input type="text" class="grid-input" id="lat-display" value="35.90" placeholder="위도(32°~44°)" >
-                <button class="grid-btn" id="down-button-lat">▽</button>
-                <button class="grid-btn" id="up-button-lat">△</button>
-                <button class="grid-btn" id="ok-button" style="grid-row: span 2;">확인</button>
-
-                <input type="text" class="grid-input" id="lon-display" value="127.80" placeholder="경도(123°~131°)">
-                <button class="grid-btn" id="down-button-lon">▽</button>
-                <button class="grid-btn" id="up-button-lon">△</button>
-
-                <input type="text" class="grid-input" id="rad-display" placeholder="반경(km)">
-                <button class="grid-btn" id="zoom-out-button">▽</button>
-                <button class="grid-btn" id="zoom-in-button">△</button>
-                <button class="grid-btn" id="zero-button">기본값</button>
-            </div>
-
-            <div class="bottom">
-                <img id="logo" src="https://www.kogl.or.kr/static/kogl/img/sub/number2.jpg" alt="공공누리 제2유형">
-                <div class="resource"> 출처: 기상청</div> 
-            </div>
+        <div class="bottom">
+            <img id="logo" src="https://www.kogl.or.kr/static/kogl/img/sub/number2.jpg" alt="공공누리 제2유형">
+            <div class="resource"> 출처: 기상청</div> 
         </div>
-        </div>
-    <script src="./scripts.js"></script>
+        
+    </div>
+    <script src="scripts.js"></script>
 </body>
 </html>
-
