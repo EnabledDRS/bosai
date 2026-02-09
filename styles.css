@@ -11,20 +11,7 @@ body {
     padding-bottom: env(safe-area-inset-bottom);
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
-
-    /* 폰트 통일 */
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    
-    /* 가로 모드 글자 크기 자동 조정 방지 */
-    -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
 }
-
-/* 모든 입력 요소 폰트 상속 강제 */
-input, button, select, textarea {
-    font-family: inherit;
-}
-
 /* -------------------------------------------------------------- */
 .container {
     width: 350px;
@@ -39,14 +26,6 @@ input, button, select, textarea {
     background-color: #1e1e1e;
 }
 
-/* 패널 정렬 설정 */
-.left-panel, .right-panel {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
 @media (max-width: 450px) {
     .container {
         width: 100%;
@@ -54,14 +33,13 @@ input, button, select, textarea {
         padding: 5px 5px;
     }
 }
-
 /* -------------------------------------------------------------- */
 .top-controller {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    height: auto;
+    height:auto;
     padding-top: 5px;
     padding-bottom: 10px;
 }
@@ -77,19 +55,17 @@ input, button, select, textarea {
 .time-info {
     margin-left: 5px;
     color: #cccccc;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end; 
 }
 
 .now {
     margin-top: 2px;
 }
-
 /* -------------------------------------------------------------- */
 #radar-image {
     width: 100%;
-    height: auto;
+    height: 180px;       /* 높이를 160px로 고정 */
+    object-fit: contain; /* 이미지 비율 유지 (찌그러짐 방지) */
+    background-color: #000; /* 빈 공간이 생길 경우 배경색 지정 (선택사항) */
     display: block;
 }
 
@@ -98,18 +74,14 @@ input, button, select, textarea {
     margin: 5px 0;
     font-size: 14px; 
     width: 100%; 
-    /* 여기서 bold 제거됨 */
-    font-weight: normal;
-    font-family: inherit;
 }
 
 #time-slider {
     display: block;
     width: 85%; 
     background-color: #333;
-    margin: 5px auto;
+    margin: 5 auto;
 }
-
 /* -------------------------------------------------------------- */
 .buttom-controller {
     display: flex;
@@ -124,13 +96,12 @@ input, button, select, textarea {
     border-radius: 5px;
     padding: 0 10px;
     height: 28px;
-    line-height: 18px; 
+    line-height: 18px;
     margin: 0 5px;
     color: #ffffff;
     background-color: #333;
     display: flex;
     align-items: center;
-    justify-content: center;
 }
 
 .speed-btn, .pause-btn {
@@ -143,7 +114,6 @@ input, button, select, textarea {
     margin: 0 5px;
     display: flex;
     align-items: center;
-    justify-content: center;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
     white-space: nowrap;
@@ -156,7 +126,7 @@ input, button, select, textarea {
 .speed-btn:active, .pause-btn:active {
     background-color: #555;
     transform: scale(0.95);
-    color: #ffffff;
+    color: #ffffff; /* Added to revert color after click */
 }
 
 /* -------------------------------------------------------------- */
@@ -190,9 +160,7 @@ input, button, select, textarea {
     box-sizing: border-box;
     border: 1px solid #555;
     border-radius: 5px;
-    padding-left: 5px;
-    background-color: #ffffff; 
-    color: #000;
+    padding-left: 5px
 }
 
 .grid-btn {
@@ -202,9 +170,6 @@ input, button, select, textarea {
     border: 1px solid #555;
     border-radius: 5px;
     transition: background-color 0.3s, transform 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .grid-btn:hover {
@@ -215,7 +180,7 @@ input, button, select, textarea {
 .grid-btn:active {
     background-color: #555;
     transform: scale(0.95);
-    color: #ffffff;
+    color: #ffffff; /* Added to revert color after click */
 }
 
 .grid-btn.highlight {
@@ -239,158 +204,4 @@ input, button, select, textarea {
 .resource {
     font-size: 12px;
     color: #ffffff;
-}
-
-/* ============================================================== */
-/* 가로 모드 (Landscape) 전용 스타일 */
-/* ============================================================== */
-@media screen and (orientation: landscape) {
-    body {
-        height: 100vh;
-        overflow: hidden;
-        background-color: #000;
-    }
-
-    .container {
-        flex-direction: row;
-        width: 100%;
-        height: 100%;
-        padding: 0;
-        justify-content: space-between;
-        background-color: #1e1e1e;
-        border: none;
-    }
-
-    .left-panel {
-        flex: 1; 
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #000; 
-        overflow: hidden;
-    }
-
-    #radar-image {
-        height: 100%;
-        width: auto;
-        object-fit: contain; 
-    }
-
-    .right-panel {
-        width: 320px;
-        min-width: 320px;
-        height: 100%;
-        overflow-y: hidden;
-        padding: 5px 10px; 
-        box-sizing: border-box;
-        border-left: 1px solid #333;
-        background-color: #1e1e1e;
-        justify-content: space-around;
-    }
-
-    .top-controller {
-        display: flex;
-        flex-direction: row !important;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        margin-bottom: 2px;
-        padding-top: 0;
-        padding-bottom: 0;
-    }
-
-    .region-select {
-        width: 55%;
-        font-size: 11px;
-        height: 24px;
-        padding: 0 2px;
-    }
-
-    .time-info {
-        width: 44%;
-        font-size: 10px;
-        line-height: 1.2;
-        margin: 0;
-    }
-    
-    .now {
-        margin-top: 0;
-    }
-
-    /* [수정됨] 폰트 통일 */
-    .image-time {
-        margin: 2px 0;
-        font-size: 13px;
-        font-weight: normal; /* bold 제거 */
-        font-family: inherit;
-    }
-
-    #time-slider {
-        width: 98% !important;
-        margin: 2px auto;
-        height: 15px;
-    }
-
-    .buttom-controller {
-        width: 100%;
-        justify-content: space-evenly;
-        margin: 2px 0;
-        padding: 0;
-    }
-    
-    .buttom-controller button {
-        font-size: 11px;
-        padding: 0 8px;
-        height: 24px;
-    }
-    
-    .speed-display {
-        font-size: 11px;
-        height: 24px;
-    }
-
-    .checkboxes {
-        width: 100%;
-        justify-content: center;
-        gap: 8px;
-        flex-wrap: wrap;
-        margin: 2px 0;
-        font-size: 11px;
-    }
-
-    .button-grid {
-        width: 98%;
-        margin: 2px 0;
-        gap: 3px;
-    }
-    
-    .grid-input {
-        font-size: 11px;
-        padding: 2px;
-        height: 24px;
-    }
-    
-    .grid-btn {
-        font-size: 11px;
-        padding: 0;
-        height: 24px;
-    }
-
-    .bottom {
-        width: 100%;
-        justify-content: center;
-        gap: 10px;
-        margin-top: 2px; 
-        padding-bottom: 2px;
-        padding-top: 2px;
-    }
-    
-    #logo {
-        height: 18px;
-    }
-    
-    .resource {
-        font-size: 10px;
-    }
 }
